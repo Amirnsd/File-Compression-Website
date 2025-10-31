@@ -5,7 +5,6 @@ plugins {
     kotlin("jvm") version "2.2.20"
     id("io.ktor.plugin") version "3.3.1"
     kotlin("plugin.serialization") version "2.2.20"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.example"
@@ -34,20 +33,4 @@ dependencies {
     
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-}
-
-tasks {
-    shadowJar {
-        archiveBaseName.set("file-compression-tool")
-        archiveClassifier.set("all")
-        archiveVersion.set("")
-        mergeServiceFiles()
-        manifest {
-            attributes["Main-Class"] = "io.ktor.server.netty.EngineMain"
-        }
-    }
-    
-    build {
-        dependsOn(shadowJar)
-    }
 }
