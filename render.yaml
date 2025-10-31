@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: file-compression-tool
+    runtime: docker
+    repo: https://github.com/Amirnsd/File-Compression-Website.git
+    region: oregon
+    plan: free
+    buildCommand: ./gradlew build --no-daemon
+    startCommand: java -jar build/libs/*-all.jar
+    envVars:
+      - key: PORT
+        value: 8080
