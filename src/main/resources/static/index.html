@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Compression Tool</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div>
+                    <h1>🗜️ File Compression Tool</h1>
+                    <p>Compress and decompress your files easily</p>
+                </div>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('compress')">Compress</button>
+            <button class="tab-button" onclick="switchTab('decompress')">Decompress</button>
+            <button class="tab-button" onclick="switchTab('history')">History</button>
+        </div>
+
+        <!-- Compress Tab -->
+        <div id="compress-tab" class="tab-content active">
+            <div class="card">
+                <h2>Compress Files</h2>
+                <form id="compress-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="compress-file">Select File(s):</label>
+                        <div class="file-input-wrapper" id="compress-drop-zone">
+                            <input type="file" id="compress-file" name="file" multiple required>
+                            <div class="file-name" id="compress-file-name">
+                                <span class="drop-icon">📁</span>
+                                <span class="drop-text">Click or drag files here</span>
+                                <span class="drop-subtext">Multiple files supported • Drag & drop anywhere</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- File Preview -->
+                    <div id="file-preview" class="file-preview hidden">
+                        <h3>Selected Files:</h3>
+                        <div id="file-list" class="file-list"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Compression Type:</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="type" value="gzip" checked>
+                                <span>GZIP (.gz)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="type" value="zip">
+                                <span>ZIP (.zip)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="type" value="deflate">
+                                <span>DEFLATE (.deflate)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="type" value="tar.gz">
+                                <span>TAR.GZ (.tar.gz)</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="compression-level">Compression Level:</label>
+                        <select id="compression-level" name="level" class="select-input">
+                            <option value="fast">⚡ Fast (Less compression, faster speed)</option>
+                            <option value="normal" selected>⚖️ Normal (Balanced)</option>
+                            <option value="maximum">🎯 Maximum (Best compression, slower speed)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="password-group">
+                        <label for="password">🔒 Password Protection (ZIP only - optional):</label>
+                        <input type="password" id="password" name="password" class="text-input" placeholder="Enter password">
+                        <small class="help-text">Leave empty for no password protection</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Compress File(s)</span>
+                        <span class="spinner hidden"></span>
+                    </button>
+                    
+                    <!-- Progress Bar -->
+                    <div id="compress-progress" class="progress-container hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="compress-progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="compress-progress-text">Processing...</div>
+                    </div>
+                </form>
+                
+                <div id="compress-result" class="result hidden"></div>
+                <div id="compress-stats" class="stats hidden"></div>
+            </div>
+        </div>
+
+        <!-- Decompress Tab -->
+        <div id="decompress-tab" class="tab-content">
+            <div class="card">
+                <h2>Decompress File</h2>
+                <form id="decompress-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="decompress-file">Select Compressed File:</label>
+                        <div class="file-input-wrapper" id="decompress-drop-zone">
+                            <input type="file" id="decompress-file" name="file" accept=".gz,.zip,.deflate,.tar.gz,.tgz,.rar" required>
+                            <div class="file-name" id="decompress-file-name">
+                                <span class="drop-icon">📦</span>
+                                <span class="drop-text">Click or drag compressed file here</span>
+                                <span class="drop-subtext">Supported: .gz, .zip, .deflate, .tar.gz, .rar</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- File Preview for Decompression -->
+                    <div id="decompress-file-preview" class="file-preview hidden">
+                        <h3>File Information:</h3>
+                        <div id="decompress-file-info" class="file-list"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="decompress-password">🔓 Password (if protected):</label>
+                        <input type="password" id="decompress-password" name="password" class="text-input" placeholder="Enter password">
+                        <small class="help-text">Required only for password-protected archives</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Decompress File</span>
+                        <span class="spinner hidden"></span>
+                    </button>
+                    
+                    <!-- Progress Bar -->
+                    <div id="decompress-progress" class="progress-container hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="decompress-progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="decompress-progress-text">Processing...</div>
+                    </div>
+                </form>
+                
+                <div id="decompress-result" class="result hidden"></div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="history-tab" class="tab-content">
+            <div class="card">
+                <div class="history-header">
+                    <h2>📊 Compression History & Statistics</h2>
+                    <button id="clear-history-btn" class="btn-secondary">Clear History</button>
+                </div>
+                
+                <!-- Overall Statistics -->
+                <div id="overall-stats" class="stats-dashboard">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="total-compressions">0</div>
+                            <div class="stat-label">Total Compressions</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📂</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="total-decompressions">0</div>
+                            <div class="stat-label">Total Decompressions</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💾</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="total-space-saved">0 B</div>
+                            <div class="stat-label">Space Saved</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <div class="stat-number" id="avg-compression-ratio">0%</div>
+                            <div class="stat-label">Avg. Compression</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent History -->
+                <div class="history-section">
+                    <h3>Recent Activity</h3>
+                    <div id="history-list" class="history-list">
+                        <div class="empty-state">
+                            <span class="empty-icon">📭</span>
+                            <p>No compression history yet</p>
+                            <p class="empty-subtext">Start compressing files to see your history here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>Formats:</strong> GZIP, ZIP, DEFLATE, TAR.GZ, RAR (decompress only)</p>
+            <p><strong>Features:</strong> Batch compression • Password protection • Multiple compression levels • History tracking</p>
+            <p>Maximum file size: 50MB per file</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/storage.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
