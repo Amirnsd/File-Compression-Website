@@ -281,5 +281,4 @@ http://localhost:8080
 
 ---
 
-**Built for [Course Name] - Fall 2025**  
 **GitHub**: [File-Compression-Website](https://github.com/Amirnsd/File-Compression-Website)
