@@ -267,7 +267,7 @@ http://localhost:8080
 
 ## 📈 Project Statistics
 
-- **Total Lines of Code**: ~2,500+
+- **Total Lines of Code**: ~800+
 - **Compression Algorithms**: 4 (GZIP, ZIP, DEFLATE, TAR.GZ)
 - **Supported File Types**: All types
 - **Team Members**: 5
